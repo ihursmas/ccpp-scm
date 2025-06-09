@@ -2289,10 +2289,6 @@ module GFS_typedefs
     integer :: IM
 
     IM = Model%ncols
-!+ pumas
-!    Model%ix_micro         = 1 !!!!!!!! only for SCM for hackathon
-    Model%ix_micro         = Model%ncols
-!- pumas
 
     !--- level geopotential and pressures
     allocate (Statein%phii  (IM,Model%levs+1))
@@ -4539,6 +4535,10 @@ module GFS_typedefs
     allocate (Model%blksz(1:Model%nblks))
     Model%blksz            = blksz
     Model%ncols            = sum(Model%blksz)
+!+ pumas
+!    Model%ix_micro         = 1 !!!!!!!! only for SCM for hackathon
+    Model%ix_micro         = Model%ncols
+!- pumas
     ! DH*
     Model%nchunks          = size(blksz)
     allocate (Model%chunk_begin(Model%nchunks))
