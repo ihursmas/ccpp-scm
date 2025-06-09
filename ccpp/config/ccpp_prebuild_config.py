@@ -21,6 +21,7 @@ VARIABLE_DEFINITION_FILES = [
     'ccpp/physics/physics/Radiation/RRTMG/radlw_param.f',
     'ccpp/physics/physics/photochem/module_ozphys.F90',
     'ccpp/physics/physics/photochem/module_h2ophys.F90',
+    'ccpp/physics/physics/SFC_Models/Land/Noahmp/lnd_iau_mod.F90',
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/module_ccpp_suite_simulator.F90',
     'ccpp/physics/physics/MP/pumas/PUMAS/micro_pumas_diags.F90',
     'scm/src/CCPP_typedefs.F90',
@@ -54,9 +55,15 @@ TYPEDEFS_NEW_METADATA = {
         'module_h2ophys' : '',
         'ty_h2ophys'     : '',
         },
+    'land_iau_mod' : {
+        'land_iau_mod' : '',
+        'land_iau_external_data_type' : '',
+        'land_iau_state_type' : '',
+        'land_iau_control_type' : '',
+        },
     'micro_pumas_diags' : {
         'micro_pumas_diags' : '',
-        'proc_rates_type'   : '',
+#        'proc_rates_type'   : '',
         },
     'CCPP_typedefs' : {
         'GFS_interstitial_type' : 'physics%Interstitial(cdata%thrd_no)',
@@ -117,8 +124,6 @@ SCHEME_FILES = [
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_rrtmgp_cloud_mp.F90'          ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_rrtmgp_cloud_overlap.F90'     ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_rrtmgp_post.F90'              ,
-    'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_interstitial_rad_reset.F90',
-    'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_interstitial_phys_reset.F90',
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_interstitial_1.F90'     ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_interstitial_2.F90'     ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_stateout_reset.F90'     ,
