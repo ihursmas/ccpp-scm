@@ -44,6 +44,13 @@ run_list = [\
             {"case": "atomic_Jan16T22Jan18T06", "suite": "SCM_GFS_v16_no_nsst"},                                                                          \
             {"case": "atomic_Jan16T22Jan18T06", "suite": "SCM_GFS_v17_p8_ugwpv1_no_nsst"},                                                                \
             {"case": "atomic_Jan16T22Jan18T06", "suite": "SCM_RRFS_v1beta_no_nsst"},                                                                      \
+##+ pumas
+            {"case": "arm_sgp_summer_1997_A", "suite": "SCM_GFS_v17_p8_ugwpv1_pumas"},                                                                    \
+            {"case": "twpice",                "suite": "SCM_GFS_v17_p8_ugwpv1_pumas"},                                                                    \
+            {"case": "bomex",                 "suite": "SCM_GFS_v17_p8_ugwpv1_pumas"},                                                                    \
+            {"case": "astex",                 "suite": "SCM_GFS_v17_p8_ugwpv1_pumas"},                                                                    \
+            {"case": "LASSO_2016051812",      "suite": "SCM_GFS_v17_p8_ugwpv1_pumas"},                                                                    \
+##- pumas
             {"case": "arm_sgp_summer_1997_A", "suite": "SCM_GFS_v17_p8"},                                                                                 \
             {"case": "arm_sgp_summer_1997_A", "suite": "SCM_HRRR"},                                                                                       \
             {"case": "arm_sgp_summer_1997_A", "suite": "SCM_RRFS_v1beta"},                                                                                \
