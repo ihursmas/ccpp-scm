@@ -119,48 +119,6 @@
   type = real
   kind = kind_phys
   active = (do_lightning_threat_index_calculations)
-[def_1]
-  standard_name = square_of_vertical_shear_due_to_dynamics
-  long_name = square of vertical shear calculated from dynamics
-  units = m2 s-2
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-[def_1(:,1)]
-  standard_name = square_of_vertical_shear_due_to_dynamics_at_surface_adjacent_layer
-  long_name = square of vertical shear calculated from dynamics at lowest model layer
-  units = m2 s-2
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-[def_2]
-  standard_name = square_of_horizontal_shear_due_to_dynamics
-  long_name = square of horizontal shear calculated from dynamics
-  units = m2 s-2
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-[def_2(:,1)]
-  standard_name = square_of_horizontal_shear_due_to_dynamics_at_surface_adjacent_layer
-  long_name = square of horizontal shear calculated from dynamics at lowest model layer
-  units = m2 s-2
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-[def_3]
-  standard_name = horizontal_transfer_rate_of_tke_due_to_dynamics
-  long_name = rate of horizontal TKE transfer and pressure correlation calculated from dynamics
-  units = m2 s-3
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-[def_3(:,1)]
-  standard_name = horizontal_transfer_rate_tke_due_to_dynamics_at_surface_adjacent_layer
-  long_name = rate of horizontal TKE transfer and pressure correlation calculated from dynamics at lowest model layer
-  units = m2 s-3
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
 [vvl]
   standard_name = lagrangian_tendency_of_air_pressure
   long_name = layer mean vertical velocity
@@ -394,7 +352,7 @@
 [qgrs(:,:,index_of_updraft_velocity_in_tracer_concentration_array)]
   standard_name = prognostic_updraft_velocity_in_convection
   long_name = convective updraft velocity
-  units = Pa s-1
+  units = frac
   dimensions = (horizontal_dimension,vertical_layer_dimension)
   type = real
   kind = kind_phys
@@ -684,7 +642,7 @@
 [gq0(:,:,index_of_updraft_velocity_in_tracer_concentration_array)]
   standard_name = updraft_velocity_updated_by_physics
   long_name = convective updraft area fraction updated by physics
-  units = Pa s-1
+  units = frac
   dimensions = (horizontal_dimension,vertical_layer_dimension)
   type = real
   kind = kind_phys
@@ -3233,7 +3191,7 @@
   dimensions = (horizontal_dimension)
   type = real
   kind = kind_phys
-  active = ((control_for_microphysics_scheme == identifier_for_thompson_microphysics_scheme .or. control_for_microphysics_scheme == identifier_for_tempo_microphysics_scheme) .and. (flag_for_aerosol_physics .or. do_merra2_aerosol_awareness))
+  active = (control_for_microphysics_scheme == identifier_for_thompson_microphysics_scheme .and. (flag_for_aerosol_physics .or. do_merra2_aerosol_awareness))
 [nifa2d]
   standard_name = tendency_of_nonhygroscopic_ice_nucleating_aerosols_at_surface_adjacent_layer
   long_name = instantaneous ice-friendly sfc aerosol source
@@ -3241,7 +3199,7 @@
   dimensions = (horizontal_dimension)
   type = real
   kind = kind_phys
-  active = ((control_for_microphysics_scheme == identifier_for_thompson_microphysics_scheme .or. control_for_microphysics_scheme == identifier_for_tempo_microphysics_scheme) .and. (flag_for_aerosol_physics .or. do_merra2_aerosol_awareness))
+  active = (control_for_microphysics_scheme == identifier_for_thompson_microphysics_scheme .and. (flag_for_aerosol_physics .or. do_merra2_aerosol_awareness))
 [ebu_smoke]
   standard_name = ebu_smoke
   long_name = buffer of vertical fire emission
@@ -3633,6 +3591,18 @@
   units = count
   dimensions = ()
   type = integer
+[micro_nlev]
+  standard_name = microphysics_vertical_layer_dimension
+  long_name = vertical layer dimension used by microphysics
+  units = count
+  dimensions = ()
+  type = integer
+[micro_nlevp1]
+  standard_name = microphysics_vertical_interface_dimension
+  long_name = vertical interface dimension used by microphysics
+  units = count
+  dimensions = ()
+  type = integer
 [lonr]
   standard_name = number_of_equatorial_longitude_points
   long_name = number of global points in x-dir (i) along the equator
@@ -3697,6 +3667,12 @@
   standard_name = horizontal_loop_end
   long_name = last index for horizontal loop extent in run phase
   units = index
+  dimensions = ()
+  type = integer
+[ix_micro]
+  standard_name = microphysics_horizontal_loop_extent
+  long_name = horizontal loop extent used in microphysics
+  units = count
   dimensions = ()
   type = integer
 [tile_num]
@@ -3830,6 +3806,13 @@
 [dtf]
   standard_name = timestep_for_dynamics
   long_name = dynamics timestep
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[dtm]
+  standard_name = timestep_for_microphysics
+  long_name = microphysics time step
   units = s
   dimensions = ()
   type = real
@@ -4415,12 +4398,6 @@
   units = flag
   dimensions = ()
   type = integer
-[imp_physics_tempo]
-  standard_name = identifier_for_tempo_microphysics_scheme
-  long_name = choice of TEMPO microphysics scheme
-  units = flag
-  dimensions = ()
-  type = integer
 [imp_physics_wsm6]
   standard_name = identifier_for_wsm6_microphysics_scheme
   long_name = choice of WSM6 microphysics scheme
@@ -4945,12 +4922,6 @@
   units = flag
   dimensions = ()
   type = logical
-[lthailaware]
-  standard_name = flag_for_hail_physics
-  long_name = flag for hail physics
-  units = flag
-  dimensions = ()
-  type = logical
 [mraerosol]
   standard_name = do_merra2_aerosol_awareness
   long_name = flag for merra2 aerosol-aware physics for example the thompson microphysics
@@ -5001,12 +4972,6 @@
   units = count
   dimensions = ()
   type = integer
-[tempo_cfg]
-  standard_name = configuration_for_TEMPO_microphysics
-  long_name = configuration information for TEMPO microphysics
-  units = mixed
-  dimensions = ()
-  type = ty_tempo_cfg
 [thompson_mp_is_init]
   standard_name = flag_for_thompson_mp_scheme_initialization
   long_name = flag carrying scheme initialization status
@@ -5022,12 +4987,6 @@
 [lgfdlmprad]
   standard_name = flag_for_GFDL_microphysics_radiation_interaction
   long_name = flag for GFDL microphysics-radiation interaction
-  units = flag
-  dimensions = ()
-  type = logical
-[fast_mp_consv]
-  standard_name = flag_for_fast_microphysics_energy_conservation
-  long_name = flag for fast microphysics energy conservation
   units = flag
   dimensions = ()
   type = logical
@@ -5602,12 +5561,6 @@
 [dspheat]
   standard_name = flag_TKE_dissipation_heating
   long_name = flag for tke dissipative heating
-  units = flag
-  dimensions = ()
-  type = logical
-[sa3dtke]
-  standard_name = do_scale_aware_3d_tke
-  long_name = flag for scale-aware 3d tke scheme
   units = flag
   dimensions = ()
   type = logical
@@ -6195,12 +6148,6 @@
 [tc_pbl]
   standard_name = control_for_TC_applications_in_the_PBL_scheme
   long_name = control for TC applications in the PBL scheme
-  units = none
-  dimensions = ()
-  type = integer
-[use_lpt]
-  standard_name = control_for_using_LPT_for_TC_applications_in_the_PBL_scheme
-  long_name = control for using LPT in TC applications in the PBL scheme
   units = none
   dimensions = ()
   type = integer
@@ -7308,6 +7255,202 @@
   units = index
   dimensions = ()
   type = integer
+[micro_mg_accre_enhan_fact]
+  standard_name = accretion_enhancement_factor
+  long_name = KK2000 accretion enhancement factor for MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_autocon_fact]
+  standard_name = autconversion_enhancement_factor
+  long_name = KK2000 autonconverion enhancement factor for MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_autocon_lwp_exp]
+  standard_name = autconversion_lwp_exponent
+  long_name = KK2000 autonconverion lwp (qc) exponent in MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_autocon_nd_exp]
+  standard_name = autconversion_nd_exponent
+  long_name = KK2000 autonconverion nd exponent in MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_warm_rain]
+  standard_name = control_for_warm_rain_method
+  long_name = warm rain method (KK2000,sb2001,tau,emulated)
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[micro_mg_implicit_fall]
+  standard_name = do_implicit_fall_speed_calc
+  long_name = use implicit calculation for fall speed for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_dust_nbins]
+  standard_name = dust_size_bins_dimension
+  long_name = number of dust particle size bins
+  units = count
+  dimensions = ()
+  type = integer
+[stochastic_emulated_filename_input_scale]
+  standard_name = filename_of_emulated_stochastic_collection_input_scalings
+  long_name = emulated stochastic collection filename for input scaling
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[stochastic_emulated_filename_output_scale]
+  standard_name = filename_of_emulated_stochastic_collection_output_scalings
+  long_name = emulated stochastic collection filename for output scaling
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[stochastic_emulated_filename_quantile]
+  standard_name = filename_of_emulated_stochastic_collection_quantiles
+  long_name = emulated stochastic collection filename for quantiles
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[micro_mg_accre_sees_auto]
+  standard_name = flag_for_accretion_sees_autoconverted_condensate
+  long_name = KK200 accretion sees newely formed rain for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_ifs_sed]
+  standard_name = flag_for_constant_sedimentation_fall_speed
+  long_name = Use constant sedimentation of all species for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_precip_fall_corr]
+  standard_name = flag_for_fall_speed_correction
+  long_name = ensure non-zero precipitation fallspeed for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[use_hetfrz_classnuc]
+  standard_name = flag_for_heterogeneous_ice_nucleation
+  long_name = flag for heterogeneous freezing for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_evap_sed_off]
+  standard_name = flag_for_no_evaporation_of_precipitation
+  long_name = true for sedimenting condensate does not evaporate for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_nrcons]
+  standard_name = flag_for_prescribed_rain_number_concentration
+  long_name = flag for constant rain concentration for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_nscons]
+  standard_name = flag_for_prescribed_snow_number_concentration
+  long_name = flag for constant snow concentration for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_rainfreeze_ifs]
+  standard_name = flag_to_freeze_rain_at_0C
+  long_name = Freeze rain at 0C for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_icenuc_rh_off]
+  standard_name = flag_to_remove_threshold_for_ice_nucleation
+  long_name = If .true., remove RH threshold from ice nucelation calculation for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_evap_scl_ifs]
+  standard_name = flag_to_scale_evaporation_like_ifs
+  long_name = if True Apply 0.3 scaling factor to evaporation of precipitation for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_icenuc_use_meyers]
+  standard_name = flag_to_use_meyers_ice_nucleation
+  long_name = use temperature dependent ice nucleation from Meyers 1992 for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_evap_rhthrsh_ifs]
+  standard_name = flag_use_ifs_evaporation_threshold
+  long_name = Do not evaporate precipitation until RH below 90% as done in the for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_homog_size]
+  standard_name = homogeneous_freezing_radius
+  long_name = radius of drops homogeneously frozen in MG microphysics
+  units = m
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_max_nicons]
+  standard_name = maximum_ice_number_concentration
+  long_name = maximum allowed ice number concentration for MG microphysics
+  units = m-3
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_nrnst]
+  standard_name = prescribed_rain_number_concentration
+  long_name = rain concentration constant for MG microphysics
+  units = m-3
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_nsnst]
+  standard_name = prescribed_snow_number_concentration
+  long_name = snow concentration constant for MG microphysics
+  units = m-3
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_iaccr_factor]
+  standard_name = scaling_factor_for_ice_accretion
+  long_name = scaling factor for ice accretion in MG microphysics
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_vtrmi_factor]
+  standard_name = scaling_factor_for_ice_fall_speed
+  long_name = scaling factor for cloud ice fall speed in MG microphysics
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_effi_factor]
+  standard_name = scaling_factor_for_ice_in_radiation
+  long_name = scaling factor for ice effective radition used by radiation
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_vtrms_factor]
+  standard_name = scaling_factor_for_snow_fall_speed
+  long_name = scaling factor for snow fall speed in MG microphysics
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
 [do_ccpp_suite_sim]
   standard_name = flag_for_CCPP_suite_simulator
   long_name = flag for ccpp suite simulator
@@ -7834,12 +7977,6 @@
   dimensions = ()
   type = real
   kind = kind_phys
-[do_ngw_ec]
-  standard_name = flag_for_ngw_ec
-  long_name = flag to activate ecmwf ngwd
-  units = flag
-  dimensions = ()
-  type = logical
 [do_ugwp_v1]
   standard_name = flag_for_ugwp_version_1
   long_name = flag to activate ver 1 CIRES UGWP
@@ -7861,12 +7998,6 @@
 [lmfdeep2]
   standard_name = flag_for_scale_aware_mass_flux_deep_convection_for_radiation
   long_name = flag for some scale-aware mass-flux convection scheme active
-  units = flag
-  dimensions = ()
-  type = logical
-[do_canopy]
-  standard_name = flag_for_canopy_option
-  long_name = flag for in-canopy eddy diffusivity adjustment option
   units = flag
   dimensions = ()
   type = logical
@@ -8186,20 +8317,6 @@
   long_name = pbl height
   units = m
   dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-[dku3d_h]
-  standard_name = horizontal_atmosphere_momentum_diffusivity_for_dynamics
-  long_name = horizontal atmospheric momentum diffusivity for dynamics
-  units = m2 s-1
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-[dku3d_e]
-  standard_name = horizontal_atmosphere_tke_diffusivity_for_dynamics
-  long_name = horizontal atmospheric tke diffusivity for dynamics
-  units = m2 s-1
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
   type = real
   kind = kind_phys
 [ud_mf]
@@ -8840,46 +8957,6 @@
   dimensions = (horizontal_dimension,number_of_diagnostics_variables_for_radiation)
   type = real
   kind = kind_phys
-[claie]
-  standard_name = canopy_leaf_area_index
-  long_name = canopy leaf area index
-  units = none
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_air_quality_coupling .and. flag_for_canopy_option)
-[cfch]
-  standard_name = canopy_forest_height
-  long_name = canopy forest height
-  units = m
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_air_quality_coupling .and. flag_for_canopy_option)
-[cfrt]
-  standard_name = canopy_forest_fraction
-  long_name = canopy forest fraction
-  units = none
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_air_quality_coupling .and. flag_for_canopy_option)
-[cclu]
-  standard_name = canopy_clumping_index
-  long_name = canopy clumping index
-  units = none
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_air_quality_coupling .and. flag_for_canopy_option)
-[cpopu]
-  standard_name = canopy_population_density
-  long_name = population density used for canopy correction
-  units = km-2
-  dimensions = (horizontal_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_air_quality_coupling .and. flag_for_canopy_option)
 [topfsw]
   standard_name = sw_fluxes_top_atmosphere
   long_name = sw radiation fluxes at toa
@@ -9710,22 +9787,6 @@
   type = real
   kind = kind_phys
   active = (flag_for_diagnostics_3D .and. flag_for_nrl_2015_ozone_scheme)
-[dqv_dt_prd]
-  standard_name = water_vapor_tendency_due_to_production_and_loss_rate
-  long_name = water_vapor tendency due to production and loss rate
-  units = kg kg-1 s-1
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_diagnostics_3D .and. flag_for_stratospheric_water_vapor_physics)
-[dqv_dt_qvmx]
-  standard_name = water_vapor_tendency_due_to_water_vapor_mixing_ratio
-  long_name = water_vapor tendency due to water_vapor mixing ratio
-  units = kg kg-1 s-1
-  dimensions = (horizontal_dimension,vertical_layer_dimension)
-  type = real
-  kind = kind_phys
-  active = (flag_for_diagnostics_3D .and. flag_for_stratospheric_water_vapor_physics)
 [refl_10cm]
   standard_name = radar_reflectivity_10cm
   long_name = instantaneous refl_10cm
@@ -10433,7 +10494,6 @@
   relative_path = ../../ccpp/physics/physics
   dependencies = hooks/machine.F,hooks/physcons.F90
   dependencies = Radiation/RRTMG/radlw_param.f,Radiation/RRTMG/radsw_param.f
-  dependencies = MP/TEMPO/TEMPO/module_mp_tempo_params.F90
   dependencies = photochem/module_ozphys.F90,photochem/module_h2ophys.F90
   dependencies = SFC_Models/Land/Noahmp/lnd_iau_mod.F90
   dependencies = Interstitials/UFS_SCM_NEPTUNE/GFS_ccpp_suite_sim_pre.F90
