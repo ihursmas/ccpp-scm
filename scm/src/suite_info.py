@@ -76,6 +76,8 @@ suite_list.append(suite('SCM_csawmg',            'tracers_csawmg.txt',          
 suite_list.append(suite('SCM_GFS_v16_debug',     'tracers_GFS_v16.txt',                  'input_GFS_v16.nml',                 600.0, 1800.0, False))
 suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_no_nsst', 'tracers_GFS_v17_p8_ugwpv1.txt','input_GFS_v17_p8_ugwpv1.nml',       600.0, 600.0,  False))
 suite_list.append(suite('SCM_RRFS_v1beta_no_nsst',       'tracers_RRFS_v1beta.txt',      'input_RRFS_v1beta.nml',             600.0, 600.0 , False))
+suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_tempo', 'tracers_GFS_v17_p8_ugwpv1.txt',  'input_GFS_v17_p8_ugwpv1_tempo.nml', 600.0, 600.0,  False))
+suite_list.append(suite('SCM_GFS_v16_gfdlmpv3',  'tracers_GFS_v16.txt',                  'input_GFS_v16_gfdlmpv3.nml',        600.0, 1800.0, False))
 ## + pumas
 suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_pumas','tracers_GFS_v17_p8_ugwpv1.txt',   'input_GFS_v17_p8_ugwpv1_pumas.nml', 600.0, 600.0,  False))
 suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_pumas_debug','tracers_GFS_v17_p8_ugwpv1.txt','input_GFS_v17_p8_ugwpv1_pumas.nml', 600.0, 600.0,  False))

@@ -136,9 +136,6 @@
   ca_trigger   = .true.
   nspinup      = 1
   iseed_ca     = 1448371824
-  mg_nccons    = .true.
-  mg_nicons    = .true.
-  mg_ngcons    = .true.
 /
 
 &cires_ugwp_nml
