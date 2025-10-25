@@ -3633,6 +3633,18 @@
   units = count
   dimensions = ()
   type = integer
+[micro_nlev]
+  standard_name = microphysics_vertical_layer_dimension
+  long_name = vertical layer dimension used by microphysics
+  units = count
+  dimensions = ()
+  type = integer
+[micro_nlevp1]
+  standard_name = microphysics_vertical_interface_dimension
+  long_name = vertical interface dimension used by microphysics
+  units = count
+  dimensions = ()
+  type = integer
 [lonr]
   standard_name = number_of_equatorial_longitude_points
   long_name = number of global points in x-dir (i) along the equator
@@ -3717,12 +3729,25 @@
   units = flag
   dimensions = ()
   type = integer
+[ix_micro]
+  standard_name = microphysics_horizontal_loop_extent
+  long_name = horizontal loop extent used in microphysics
+  units = count
+  dimensions = ()
+  type = integer
 [tile_num]
   standard_name = index_of_cubed_sphere_tile
   long_name = tile number
   units = none
   dimensions = ()
   type = integer
+[dtm]
+  standard_name = timestep_for_microphysics
+  long_name = microphysics time step
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
 [cplflx]
   standard_name = flag_for_surface_flux_coupling
   long_name = flag controlling cplflx collection (default off)
@@ -4460,6 +4485,12 @@
 [imp_physics_mg]
   standard_name = identifier_for_morrison_gettelman_microphysics_scheme
   long_name = choice of Morrison-Gettelman microphysics scheme
+  units = flag
+  dimensions = ()
+  type = integer
+[imp_physics_pumas]
+  standard_name = identifier_for_pumas_microphysics_scheme
+  long_name = choice of PUMAS microphysics scheme
   units = flag
   dimensions = ()
   type = integer
@@ -7339,6 +7370,202 @@
   units = index
   dimensions = ()
   type = integer
+[micro_mg_accre_enhan_fact]
+  standard_name = accretion_enhancement_factor
+  long_name = KK2000 accretion enhancement factor for MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_autocon_fact]
+  standard_name = autconversion_enhancement_factor
+  long_name = KK2000 autonconverion enhancement factor for MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_autocon_lwp_exp]
+  standard_name = autconversion_lwp_exponent
+  long_name = KK2000 autonconverion lwp (qc) exponent in MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_autocon_nd_exp]
+  standard_name = autconversion_nd_exponent
+  long_name = KK2000 autonconverion nd exponent in MG microphysics
+  units = none
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_warm_rain]
+  standard_name = control_for_warm_rain_method
+  long_name = warm rain method (KK2000,sb2001,tau,emulated)
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[micro_mg_implicit_fall]
+  standard_name = do_implicit_fall_speed_calc
+  long_name = use implicit calculation for fall speed for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_dust_nbins]
+  standard_name = dust_size_bins_dimension
+  long_name = number of dust particle size bins
+  units = count
+  dimensions = ()
+  type = integer
+[stochastic_emulated_filename_input_scale]
+  standard_name = filename_of_emulated_stochastic_collection_input_scalings
+  long_name = emulated stochastic collection filename for input scaling
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[stochastic_emulated_filename_output_scale]
+  standard_name = filename_of_emulated_stochastic_collection_output_scalings
+  long_name = emulated stochastic collection filename for output scaling
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[stochastic_emulated_filename_quantile]
+  standard_name = filename_of_emulated_stochastic_collection_quantiles
+  long_name = emulated stochastic collection filename for quantiles
+  units = none
+  dimensions = ()
+  type = character
+  kind = len=256
+[micro_mg_accre_sees_auto]
+  standard_name = flag_for_accretion_sees_autoconverted_condensate
+  long_name = KK200 accretion sees newely formed rain for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_ifs_sed]
+  standard_name = flag_for_constant_sedimentation_fall_speed
+  long_name = Use constant sedimentation of all species for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_precip_fall_corr]
+  standard_name = flag_for_fall_speed_correction
+  long_name = ensure non-zero precipitation fallspeed for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[use_hetfrz_classnuc]
+  standard_name = flag_for_heterogeneous_ice_nucleation
+  long_name = flag for heterogeneous freezing for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_evap_sed_off]
+  standard_name = flag_for_no_evaporation_of_precipitation
+  long_name = true for sedimenting condensate does not evaporate for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_nrcons]
+  standard_name = flag_for_prescribed_rain_number_concentration
+  long_name = flag for constant rain concentration for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_nscons]
+  standard_name = flag_for_prescribed_snow_number_concentration
+  long_name = flag for constant snow concentration for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_rainfreeze_ifs]
+  standard_name = flag_to_freeze_rain_at_0C
+  long_name = Freeze rain at 0C for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_icenuc_rh_off]
+  standard_name = flag_to_remove_threshold_for_ice_nucleation
+  long_name = If .true., remove RH threshold from ice nucelation calculation for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_evap_scl_ifs]
+  standard_name = flag_to_scale_evaporation_like_ifs
+  long_name = if True Apply 0.3 scaling factor to evaporation of precipitation for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_icenuc_use_meyers]
+  standard_name = flag_to_use_meyers_ice_nucleation
+  long_name = use temperature dependent ice nucleation from Meyers 1992 for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_evap_rhthrsh_ifs]
+  standard_name = flag_use_ifs_evaporation_threshold
+  long_name = Do not evaporate precipitation until RH below 90% as done in the for MG microphysics
+  units = flag
+  dimensions = ()
+  type = logical
+[micro_mg_homog_size]
+  standard_name = homogeneous_freezing_radius
+  long_name = radius of drops homogeneously frozen in MG microphysics
+  units = m
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_max_nicons]
+  standard_name = maximum_ice_number_concentration
+  long_name = maximum allowed ice number concentration for MG microphysics
+  units = m-3
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_nrnst]
+  standard_name = prescribed_rain_number_concentration
+  long_name = rain concentration constant for MG microphysics
+  units = m-3
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_nsnst]
+  standard_name = prescribed_snow_number_concentration
+  long_name = snow concentration constant for MG microphysics
+  units = m-3
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_iaccr_factor]
+  standard_name = scaling_factor_for_ice_accretion
+  long_name = scaling factor for ice accretion in MG microphysics
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_vtrmi_factor]
+  standard_name = scaling_factor_for_ice_fall_speed
+  long_name = scaling factor for cloud ice fall speed in MG microphysics
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_effi_factor]
+  standard_name = scaling_factor_for_ice_in_radiation
+  long_name = scaling factor for ice effective radition used by radiation
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[micro_mg_vtrms_factor]
+  standard_name = scaling_factor_for_snow_fall_speed
+  long_name = scaling factor for snow fall speed in MG microphysics
+  units = 1
+  dimensions = ()
+  type = real
+  kind = kind_phys
 [do_ccpp_suite_sim]
   standard_name = flag_for_CCPP_suite_simulator
   long_name = flag for ccpp suite simulator

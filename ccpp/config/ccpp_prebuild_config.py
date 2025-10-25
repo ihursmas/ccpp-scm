@@ -24,6 +24,9 @@ VARIABLE_DEFINITION_FILES = [
     'ccpp/physics/physics/MP/TEMPO/TEMPO/module_mp_tempo_params.F90',
     'ccpp/physics/physics/SFC_Models/Land/Noahmp/lnd_iau_mod.F90',
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/module_ccpp_suite_simulator.F90',
+#+ PUMAS
+    'ccpp/physics/physics/MP/pumas/PUMAS/micro_pumas_diags.F90',
+#- PUMAS
     'scm/src/CCPP_typedefs.F90',
     'scm/src/GFS_typedefs.F90',
     'scm/src/scm_kinds.F90',
@@ -65,6 +68,11 @@ TYPEDEFS_NEW_METADATA = {
         'land_iau_state_type' : '',
         'land_iau_control_type' : '',
         },
+#+ PUMAS
+    'micro_pumas_diags' : {
+        'micro_pumas_diags' : '',
+        },
+#- PUMAS
     'CCPP_typedefs' : {
         'GFS_interstitial_type' : 'physics%Interstitial(cdata%thrd_no)',
         'CCPP_typedefs' : '',
@@ -123,6 +131,9 @@ SCHEME_FILES = [
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_cloud_diagnostics.F90'        ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_rrtmgp_cloud_mp.F90'          ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_rrtmgp_cloud_overlap.F90'     ,
+#+ IH
+#    'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_rrtmgp_post.F90'              ,
+#- IH
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_interstitial_1.F90'     ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_interstitial_2.F90'     ,
     'ccpp/physics/physics/Interstitials/UFS_SCM_NEPTUNE/GFS_suite_stateout_reset.F90'     ,
@@ -196,6 +207,11 @@ SCHEME_FILES = [
     'ccpp/physics/physics/MP/TEMPO/mp_tempo_post.F90',
     'ccpp/physics/physics/MP/Zhao_Carr/zhaocarr_gscond.f',
     'ccpp/physics/physics/MP/Zhao_Carr/zhaocarr_precpd.f',
+#+ PUMAS
+    'ccpp/physics/physics/MP/pumas/PUMAS/micro_pumas_ccpp.F90',
+    'ccpp/physics/physics/MP/pumas/mp_pumas_pre.F90',
+    'ccpp/physics/physics/MP/pumas/mp_pumas_post.F90',
+#- PUMAS
     'ccpp/physics/physics/PBL/HEDMF/hedmf.f',
     'ccpp/physics/physics/PBL/SHOC/moninshoc.f',
     'ccpp/physics/physics/PBL/SHOC/shoc.F90',

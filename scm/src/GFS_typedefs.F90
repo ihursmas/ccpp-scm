@@ -755,6 +755,10 @@ module GFS_typedefs
     real(kind=kind_phys), pointer :: bk(:)  !< from surface (k=1) to TOA (k=levs)
     integer              :: levsp1          !< number of vertical levels plus one
     integer              :: levsm1          !< number of vertical levels minus one
+!+ PUMAS
+    integer              :: micro_nlev      !< vertical layer dimension used by microphysics
+    integer              :: micro_nlevp1    !< vertical interface dimension used by microphysics
+!- PUMAS
     integer              :: cnx             !< number of points in the i-dir for this cubed-sphere face
     integer              :: cny             !< number of points in the j-dir for this cubed-sphere face
     integer              :: lonr            !< number of global points in x-dir (i) along the equator
@@ -763,6 +767,9 @@ module GFS_typedefs
     integer              :: nblks           !< for explicit data blocking: number of blocks
     integer,     pointer :: blksz(:)        !< for explicit data blocking: block sizes of all blocks
     integer              :: ncols           !< total number of columns for all blocks
+!+ PUMAS
+    integer              :: ix_micro        !< horizontal loop extent used in microphysics
+!- PUMAS
     !
     integer              :: nchunks         !< number of chunks of an array that are used in the CCPP run phase
     integer,     pointer :: chunk_begin(:)  !< first indices of chunks of an array for the CCPP run phase
@@ -807,6 +814,9 @@ module GFS_typedefs
 !--- calendars and time parameters and activation triggers
     real(kind=kind_phys) :: dtp             !< physics timestep in seconds
     real(kind=kind_phys) :: dtf             !< dynamics timestep in seconds
+!+ PUMAS
+    real(kind=kind_phys) :: dtm             !< microphysics timestep in seconds
+!- PUMAS
     integer              :: nscyc           !< trigger for surface data cycling
     integer              :: nszero          !< trigger for zeroing diagnostic buckets
     integer              :: idat(1:8)       !< initialization date and time
@@ -957,6 +967,9 @@ module GFS_typedefs
     integer              :: imp_physics_fer_hires     = 15 !< choice of Ferrier-Aligo microphysics scheme
     integer              :: imp_physics_nssl          = 17 !< choice of NSSL microphysics scheme with background CCN
     integer              :: imp_physics_nssl2mccn     = 18 !< choice of NSSL microphysics scheme with predicted CCN (compatibility)
+!+ PUMAS
+    integer              :: imp_physics_pumas         = 20 !< choice of PUMAS microphysics scheme
+!- PUMAS
     integer              :: iovr_rand                 = 0  !< choice of cloud-overlap: random
     integer              :: iovr_maxrand              = 1  !< choice of cloud-overlap: maximum random
     integer              :: iovr_max                  = 2  !< choice of cloud-overlap: maximum
@@ -1695,6 +1708,39 @@ module GFS_typedefs
 !     logical               :: land_iau_upd_slc
 !     logical               :: land_iau_do_stcsmc_adjustment
 !     real(kind=kind_phys)  :: land_iau_min_T_increment
+
+!+ PUMAS
+    real(kind=kind_phys) :: micro_mg_accre_enhan_fact !< KK2000 accretion enhancement factor for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_fact !< KK2000 autonconverion enhancement factor for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_lwp_exp !< KK2000 autonconverion lwp (qc) exponent in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_nd_exp !< KK2000 autonconverion nd exponent in PUMAS microphysics
+    character(len=256)   :: micro_mg_warm_rain !< warm rain method (KK2000,sb2001,tau,emulated)
+    logical              :: micro_mg_implicit_fall !< use implicit calculation for fall speed for PUMAS microphysics
+    integer              :: micro_dust_nbins !< number of dust particle size bins
+    character(len=256)   :: stochastic_emulated_filename_input_scale !< emulated stochastic collection filename for input scaling
+    character(len=256)   :: stochastic_emulated_filename_output_scale !< emulated stochastic collection filename for output scaling
+    character(len=256)   :: stochastic_emulated_filename_quantile !< emulated stochastic collection filename for quantiles
+    logical              :: micro_mg_accre_sees_auto !< KK200 accretion sees newely formed rain for PUMAS microphysics
+    logical              :: micro_mg_ifs_sed !< Use constant sedimentation of all species for PUMAS microphysics
+    logical              :: micro_mg_precip_fall_corr !< ensure non-zero precipitation fallspeed for PUMAS microphysics
+    logical              :: use_hetfrz_classnuc !< flag for heterogeneous freezing for PUMAS microphysics
+    logical              :: micro_mg_evap_sed_off !< true for sedimenting condensate does not evaporate for PUMAS microphys
+    logical              :: micro_mg_nrcons !< flag for constant rain concentration for PUMAS microphysics
+    logical              :: micro_mg_nscons !< flag for constant snow concentration for PUMAS microphysics
+    logical              :: micro_mg_rainfreeze_ifs !< Freeze rain at 0C for PUMAS microphysics
+    logical              :: micro_mg_icenuc_rh_off !< If .true., remove RH threshold from ice nucelation calculation for PUMAS microphysics
+    logical              :: micro_mg_evap_scl_ifs !< if True Apply 0.3 scaling factor to evaporation of precipitation for PUMAS microphysics
+    logical              :: micro_mg_icenuc_use_meyers !< use temperature dependent ice nucleation from Meyers 1992 for PUMAS microphysics
+    logical              :: micro_mg_evap_rhthrsh_ifs !< Do not evaporate precipitation until RH below 90% as done in the for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_homog_size !< radius of drops homogeneously frozen in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_max_nicons !< maximum allowed ice number concentration for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_nrnst !< rain concentration constant for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_nsnst !< snow concentration constant for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_iaccr_factor !< scaling factor for ice accretion in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_vtrmi_factor !< scaling factor for cloud ice fall speed in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_effi_factor !< scaling factor for ice effective radition used by radiation
+    real(kind=kind_phys) :: micro_mg_vtrms_factor !< scaling factor for snow fall speed in PUMAS microphysics
+!- PUMAS
 
 !--- CCPP suite simulator
     logical                                :: do_ccpp_suite_sim  !
@@ -3627,10 +3673,15 @@ module GFS_typedefs
     real(kind=kind_phys) :: tcr             = 273.16d0
 !
     logical              :: effr_in         = .false.              !< flag to use effective radii of cloud species in radiation
-    logical              :: microp_uniform  = .true.
+!+ PUMAS: Currently no 'sub-column' function for PUMAS in the CCPP SCM, so set 'microp_uniform' to false
+!    logical              :: microp_uniform  = .true.
+    logical              :: microp_uniform  = .false.
+!- PUMAS
     logical              :: do_cldliq       = .true.
     logical              :: do_cldice       = .true.
+!+ PUMAS: Currently no external modeal-aerosol-generation scheme in the CCPP SCM, so 'hetfrz_classnuc' needs to be false
     logical              :: hetfrz_classnuc = .false.
+!- PUMAS
     logical              :: mg_nccons       = .false.           !< set .true. to specify constant cloud droplet number
     logical              :: mg_nicons       = .false.           !< set .true. to specify constant cloud ice number
     logical              :: mg_ngcons       = .false.           !< set .true. to specify constant graupel/hail number
@@ -4608,10 +4659,17 @@ module GFS_typedefs
     Model%levs             = levs
     Model%levsp1           = Model%levs + 1
     Model%levsm1           = Model%levs - 1
+!+ PUMAS
+    Model%micro_nlev       = Model%levs
+    Model%micro_nlevp1     = Model%levs + 1
+!- PUMAS
     Model%nblks            = size(blksz)
     allocate (Model%blksz(1:Model%nblks))
     Model%blksz            = blksz
     Model%ncols            = sum(Model%blksz)
+!+ PUMAS
+    Model%ix_micro         = Model%ncols
+!- PUMAS
     ! DH*
     Model%nchunks          = size(blksz)
     allocate (Model%chunk_begin(Model%nchunks))
@@ -4701,6 +4759,9 @@ module GFS_typedefs
 !--- calendars and time parameters and activation triggers
     Model%dtp              = dt_phys
     Model%dtf              = dt_dycore
+!+ PUMAS
+    Model%dtm              = Model%dtp
+!- PUMAS
     Model%nscyc            = nint(Model%fhcyc*con_hr/Model%dtp)
     Model%nszero           = nint(Model%fhzero*con_hr/Model%dtp)
     Model%idat(1:8)        = idat(1:8)
@@ -5945,6 +6006,39 @@ module GFS_typedefs
        Model%h2o_coeff = 1
     end if
 
+!+ PUMAS
+    Model%micro_mg_accre_enhan_fact = 1.0_kind_phys
+    Model%micro_mg_autocon_fact     = 0.01_kind_phys
+    Model%micro_mg_autocon_lwp_exp  = 2.47_kind_phys
+    Model%micro_mg_autocon_nd_exp   = -1.1_kind_phys
+    Model%micro_mg_warm_rain = 'kk2000'
+    Model%micro_mg_implicit_fall    = .true.
+    Model%micro_dust_nbins          = 1  !!!!!!!
+    Model%stochastic_emulated_filename_input_scale  = '' !!!!!!!!
+    Model%stochastic_emulated_filename_output_scale = '' !!!!!!!!
+    Model%stochastic_emulated_filename_quantile     = '' !!!!!!!!
+    Model%micro_mg_accre_sees_auto  = .true.
+    Model%micro_mg_ifs_sed          = .false. !!!!!!!
+    Model%micro_mg_precip_fall_corr = .true.
+    Model%use_hetfrz_classnuc       = .false.
+    Model%micro_mg_evap_sed_off     = .false. !!!!!!!
+    Model%micro_mg_nrcons           = .false. !!!!!!!
+    Model%micro_mg_nscons           = .false. !!!!!!!
+    Model%micro_mg_rainfreeze_ifs   = .false. !!!!!!!
+    Model%micro_mg_icenuc_rh_off    = .false. !!!!!!!
+    Model%micro_mg_evap_scl_ifs     = .false. !!!!!!!
+    Model%micro_mg_icenuc_use_meyers = .false. !!!!!!!
+    Model%micro_mg_evap_rhthrsh_ifs = .false. !!!!!!!
+    Model%micro_mg_homog_size       = 25.0E-6_kind_phys
+    Model%micro_mg_max_nicons       = 1.0E8_kind_phys
+    Model%micro_mg_nrnst            = 1.0_kind_phys !!!!!!!
+    Model%micro_mg_nsnst            = 1.0_kind_phys !!!!!!!
+    Model%micro_mg_iaccr_factor     = 1.0_kind_phys
+    Model%micro_mg_vtrmi_factor     = 1.0_kind_phys
+    Model%micro_mg_effi_factor      = 1.0_kind_phys
+    Model%micro_mg_vtrms_factor     = 1.0_kind_phys
+!- PUMAS
+
 !--- quantities to be used to derive phy_f*d totals
     Model%nshoc_2d         = nshoc_2d
     Model%nshoc_3d         = nshoc_3d
@@ -6472,6 +6566,41 @@ module GFS_typedefs
                  ' mg_alf=',          Model%mg_alf,          ' mg_qcmin=',      Model%mg_qcmin,     &
                  ' mg_do_ice_gmao=',  Model%mg_do_ice_gmao,  ' mg_do_liq_liu=', Model%mg_do_liq_liu
 
+!+ PUMAS
+    else if (Model%imp_physics == Model%imp_physics_pumas) then    ! PUMAS Microphysics
+      Model%npdf3d  = 0
+      Model%num_p3d = 5
+      Model%num_p2d = 1
+      Model%pdfcld  = .false.
+      Model%shcnvcw = .false.
+      Model%nleffr  = 2
+      Model%nieffr  = 3
+      Model%nreffr  = 4
+      Model%nseffr  = 5
+      if (Model%mg_do_graupel .or. Model%mg_do_hail) then
+        Model%num_p3d = 6
+        Model%ngeffr  = 6
+      endif
+      if (nwat /= 6 .and. Model%fprcp >= 2) then
+        print *,' PUMAS MP requires nwat to be set to 6 - job aborted'
+        error stop
+      end if
+      if (Model%me == Model%master)                                                                 &
+         print *,' Using PUMAS double moment microphysics',                            &
+                 ' iaerclm=',         Model%iaerclm,         ' iccn=',          Model%iccn,         &
+                 ' mg_dcs=',          Model%mg_dcs,          ' mg_qcvar=',      Model%mg_qcvar,     &
+                 ' mg_ts_auto_ice=',  Model%mg_ts_auto_ice,  ' pdfflag=',       Model%pdfflag,      &
+                 ' mg_do_graupel=',   Model%mg_do_graupel,   ' mg_do_hail=',    Model%mg_do_hail,   &
+                 ' mg_nccons=',       Model%mg_nccons,       ' mg_nicon=',      Model%mg_nicons,    &
+                 ' mg_ngcons=',       Model%mg_ngcons ,      ' mg_ncnst=',      Model%mg_ncnst,     &
+                 ' mg_ninst=',        Model%mg_ninst ,       ' mg_ngnst=',      Model%mg_ngnst,     &
+                 ' sed_supersat=',    Model%sed_supersat ,   ' do_sb_physics=', Model%do_sb_physics,&
+                 ' microp_uniform=',  Model%microp_uniform,  ' do_cldice=',     Model%do_cldice,    &
+                 ' hetfrz_classnuc=', Model%hetfrz_classnuc, ' ncnd=',          Model%ncnd,         &
+                 ' mg_alf=',          Model%mg_alf,          ' mg_qcmin=',      Model%mg_qcmin,     &
+                 ' mg_do_ice_gmao=',  Model%mg_do_ice_gmao,  ' mg_do_liq_liu=', Model%mg_do_liq_liu
+!- PUMAS
+
     elseif (Model%imp_physics == Model%imp_physics_gfdl) then !GFDL microphysics
       Model%npdf3d  = 0
       if(Model%effr_in) then
@@ -6529,7 +6658,10 @@ module GFS_typedefs
 !   Unified cloud for SHOC and/or MG3
     Model%uni_cld = .false.
     Model%indcld  = -1
-    if (Model%imp_physics == Model%imp_physics_mg) then
+!+ PUMAS
+!    if (Model%imp_physics == Model%imp_physics_mg) then
+    if (Model%imp_physics == Model%imp_physics_mg .or. Model%imp_physics == Model%imp_physics_pumas) then
+!- PUMAS
       Model%uni_cld = .true.
       Model%indcld  = 1
     elseif (Model%shoc_cld) then
@@ -7023,6 +7155,20 @@ module GFS_typedefs
         print *, ' pdfflag           : ', Model%pdfflag
         print *, ' '
       endif
+!+ PUMAS
+      if (Model%imp_physics == Model%imp_physics_pumas) then
+        print *, ' PUMAS microphysical parameters'
+        print *, ' fprcp             : ', Model%fprcp
+        print *, ' mg_dcs            : ', Model%mg_dcs
+        print *, ' mg_qcvar          : ', Model%mg_qcvar
+        print *, ' mg_ts_auto_ice    : ', Model%mg_ts_auto_ice
+        print *, ' mg_alf            : ', Model%mg_alf
+        print *, ' mg_qcmin          : ', Model%mg_qcmin
+        print *, ' mg_rhmini         : ', Model%mg_rhmini
+        print *, ' pdfflag           : ', Model%pdfflag
+        print *, ' '
+      endif
+!- PUMAS
       if (Model%imp_physics == Model%imp_physics_gfdl) then
         print *, ' GFDL microphysical parameters'
         print *, ' GFDL MP radiation inter: ', Model%lgfdlmprad
