@@ -758,6 +758,10 @@ module GFS_typedefs
     real(kind=kind_phys), pointer :: bk(:)  !< from surface (k=1) to TOA (k=levs)
     integer              :: levsp1          !< number of vertical levels plus one
     integer              :: levsm1          !< number of vertical levels minus one
+!+ PUMAS
+    integer              :: micro_nlev      !< vertical layer dimension used by microphysics
+    integer              :: micro_nlevp1    !< vertical interface dimension used by microphysics
+!- PUMAS
     integer              :: cnx             !< number of points in the i-dir for this cubed-sphere face
     integer              :: cny             !< number of points in the j-dir for this cubed-sphere face
     integer              :: lonr            !< number of global points in x-dir (i) along the equator
@@ -766,6 +770,9 @@ module GFS_typedefs
     integer              :: nblks           !< for explicit data blocking: number of blocks
     integer,     pointer :: blksz(:)        !< for explicit data blocking: block sizes of all blocks
     integer              :: ncols           !< total number of columns for all blocks
+!+ PUMAS
+    integer              :: ix_micro        !< horizontal loop extent used in microphysics
+!- PUMAS
     !
     integer              :: nchunks         !< number of chunks of an array that are used in the CCPP run phase
     integer,     pointer :: chunk_begin(:)  !< first indices of chunks of an array for the CCPP run phase
@@ -811,6 +818,9 @@ module GFS_typedefs
     real(kind=kind_phys) :: dtp             !< physics timestep in seconds
     real(kind=kind_phys) :: dtf             !< dynamics timestep in seconds
     real(kind=kind_phys) :: frain           !< ratio of dynamics timestep to physics timestep
+!+ PUMAS
+    real(kind=kind_phys) :: dtm             !< microphysics timestep in seconds
+!- PUMAS
     integer              :: nscyc           !< trigger for surface data cycling
     integer              :: nszero          !< trigger for zeroing diagnostic buckets
     integer              :: idat(1:8)       !< initialization date and time
@@ -969,6 +979,9 @@ module GFS_typedefs
     integer              :: imp_physics_fer_hires     = 15 !< choice of Ferrier-Aligo microphysics scheme
     integer              :: imp_physics_nssl          = 17 !< choice of NSSL microphysics scheme with background CCN
     integer              :: imp_physics_nssl2mccn     = 18 !< choice of NSSL microphysics scheme with predicted CCN (compatibility)
+!+ PUMAS
+    integer              :: imp_physics_pumas         = 20 !< choice of PUMAS microphysics scheme
+!- PUMAS
     integer              :: iovr_rand                 = 0  !< choice of cloud-overlap: random
     integer              :: iovr_maxrand              = 1  !< choice of cloud-overlap: maximum random
     integer              :: iovr_max                  = 2  !< choice of cloud-overlap: maximum
@@ -1031,6 +1044,43 @@ module GFS_typedefs
 
     real(kind=kind_phys) :: shoc_parm(5)    !< critical pressure in Pa for tke dissipation in shoc
     integer              :: ncnd            !< number of cloud condensate types
+
+!+ PUMAS
+    real(kind=kind_phys) :: micro_mg_accre_enhan_fact !< KK2000 accretion enhancement factor for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_fact !< KK2000 autonconverion enhancement factor for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_lwp_exp !< KK2000 autonconverion lwp (qc) exponent in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_nd_exp !< KK2000 autonconverion nd exponent in PUMAS microphysics
+    character(len=256)   :: micro_mg_warm_rain !< warm rain method (KK2000,sb2001,tau,emulated)
+    logical              :: micro_mg_implicit_fall !< use implicit calculation for fall speed for PUMAS microphysics
+    integer              :: micro_dust_nbins !< number of dust particle size bins
+    character(len=256)   :: stochastic_emulated_filename_input_scale !< emulated stochastic collection filename for input scaling
+    character(len=256)   :: stochastic_emulated_filename_output_scale !< emulated stochastic collection filename for output scaling
+    character(len=256)   :: stochastic_emulated_filename_quantile !< emulated stochastic collection filename for quantiles
+    logical              :: micro_mg_accre_sees_auto !< KK200 accretion sees newely formed rain for PUMAS microphysics
+    logical              :: micro_mg_ifs_sed !< Use constant sedimentation of all species for PUMAS microphysics
+    logical              :: micro_mg_precip_fall_corr !< ensure non-zero precipitation fallspeed for PUMAS microphysics
+    logical              :: use_hetfrz_classnuc !< flag for heterogeneous freezing for PUMAS microphysics
+    logical              :: micro_mg_evap_sed_off !< true for sedimenting condensate does not evaporate for PUMAS microphys
+    logical              :: micro_mg_nrcons !< flag for constant rain concentration for PUMAS microphysics
+    logical              :: micro_mg_nscons !< flag for constant snow concentration for PUMAS microphysics
+    logical              :: micro_mg_rainfreeze_ifs !< Freeze rain at 0C for PUMAS microphysics
+    logical              :: micro_mg_icenuc_rh_off !< If .true., remove RH threshold from ice nucelation calculation for PUMAS microphysics
+    logical              :: micro_mg_evap_scl_ifs !< if True Apply 0.3 scaling factor to evaporation of precipitation for PUMAS microphysics
+    logical              :: micro_mg_icenuc_use_meyers !< use temperature dependent ice nucleation from Meyers 1992 for PUMAS microphysics
+    logical              :: micro_mg_evap_rhthrsh_ifs !< Do not evaporate precipitation until RH below 90% as done in the for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_homog_size !< radius of drops homogeneously frozen in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_max_nicons !< maximum allowed ice number concentration for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_nrnst !< rain concentration constant for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_nsnst !< snow concentration constant for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_iaccr_factor !< scaling factor for ice accretion in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_vtrmi_factor !< scaling factor for cloud ice fall speed in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_effi_factor !< scaling factor for ice effective radition used by radiation
+    real(kind=kind_phys) :: micro_mg_vtrms_factor !< scaling factor for snow fall speed in PUMAS microphysics
+!+ IH: enhancement factor testing
+    real(kind=kind_phys) :: micro_mg_freeze_enhan_fact !<
+    real(kind=kind_phys) :: micro_mg_icemult_enhan_fact !<
+!- IH
+!- PUMAS
 
     !--- NSSL microphysics params
     real(kind=kind_phys) :: nssl_cccn      !<  CCN concentration (m-3)
@@ -3649,10 +3699,15 @@ module GFS_typedefs
     real(kind=kind_phys) :: tcr             = 273.16d0
 !
     logical              :: effr_in         = .false.              !< flag to use effective radii of cloud species in radiation
-    logical              :: microp_uniform  = .true.
+!+ PUMAS: Currently no 'sub-column' function for PUMAS in the CCPP SCM, so set 'microp_uniform' to false
+!    logical              :: microp_uniform  = .true.
+    logical              :: microp_uniform  = .false.
+!- PUMAS
     logical              :: do_cldliq       = .true.
     logical              :: do_cldice       = .true.
+!+ PUMAS: Currently no external modeal-aerosol-generation scheme in the CCPP SCM, so 'hetfrz_classnuc' needs to be false
     logical              :: hetfrz_classnuc = .false.
+!- PUMAS
     logical              :: mg_nccons       = .false.           !< set .true. to specify constant cloud droplet number
     logical              :: mg_nicons       = .false.           !< set .true. to specify constant cloud ice number
     logical              :: mg_ngcons       = .false.           !< set .true. to specify constant graupel/hail number
@@ -3664,6 +3719,43 @@ module GFS_typedefs
     logical              :: mg_do_liq_liu   = .true.            !< set .true. to turn on liu liquid treatment
     real(kind=kind_phys) :: fh_dfi_radar(1+dfi_radar_max_intervals) = -2e10             !< begin&end of four timespans over which radar_tten is applied
     logical              :: do_cap_suppress = .true.            !< set .true. to turn on convection suppression in GF scheme during limited intervals when fh_dfi_radar is enabled
+
+!+ PUMAS
+    real(kind=kind_phys) :: micro_mg_accre_enhan_fact = 1.0     !< KK2000 accretion enhancement factor for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_fact     = 0.01    !< KK2000 autonconverion enhancement factor for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_lwp_exp  = 2.47    !< KK2000 autonconverion lwp (qc) exponent in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_autocon_nd_exp   = -1.1    !< KK2000 autonconverion nd exponent in PUMAS microphysics
+    character(len=256)   :: micro_mg_warm_rain        = 'kk2000'!< warm rain method (KK2000,sb2001,tau,emulated)
+    logical              :: micro_mg_implicit_fall    = .true.  !< use implicit calculation for fall speed for PUMAS microphysics
+    integer              :: micro_dust_nbins          = 1       !< number of dust particle size bins
+    character(len=256)   :: stochastic_emulated_filename_input_scale  = '' !< emulated stochastic collection filename for input scaling
+    character(len=256)   :: stochastic_emulated_filename_output_scale = '' !< emulated stochastic collection filename for output scaling
+    character(len=256)   :: stochastic_emulated_filename_quantile     = '' !< emulated stochastic collection filename for quantiles
+    logical              :: micro_mg_accre_sees_auto  = .true.  !< KK200 accretion sees newely formed rain for PUMAS microphysics
+    logical              :: micro_mg_ifs_sed          = .false. !< Use constant sedimentation of all species for PUMAS microphysics
+    logical              :: micro_mg_precip_fall_corr = .true.  !< ensure non-zero precipitation fallspeed for PUMAS microphysics
+    logical              :: use_hetfrz_classnuc       = .false. !< flag for heterogeneous freezing for PUMAS microphysics
+    logical              :: micro_mg_evap_sed_off     = .false. !< true for sedimenting condensate does not evaporate for PUMAS microphys
+    logical              :: micro_mg_nrcons           = .false. !< flag for constant rain concentration for PUMAS microphysics
+    logical              :: micro_mg_nscons           = .false. !< flag for constant snow concentration for PUMAS microphysics
+    logical              :: micro_mg_rainfreeze_ifs   = .false. !< Freeze rain at 0C for PUMAS microphysics
+    logical              :: micro_mg_icenuc_rh_off    = .false. !< If .true., remove RH threshold from ice nucelation calculation for PUMAS microphysics
+    logical              :: micro_mg_evap_scl_ifs     = .false. !< if True Apply 0.3 scaling factor to evaporation of precipitation for PUMAS microphysics
+    logical              :: micro_mg_icenuc_use_meyers= .false. !< use temperature dependent ice nucleation from Meyers 1992 for PUMAS microphysics
+    logical              :: micro_mg_evap_rhthrsh_ifs = .false. !< Do not evaporate precipitation until RH below 90% as done in the for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_homog_size       = 25.0e-6 !< radius of drops homogeneously frozen in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_max_nicons       = 1.0e8   !< maximum allowed ice number concentration for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_nrnst            = 1.0     !< rain concentration constant for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_nsnst            = 1.0     !< snow concentration constant for PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_iaccr_factor     = 1.0     !< scaling factor for ice accretion in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_vtrmi_factor     = 1.0     !< scaling factor for cloud ice fall speed in PUMAS microphysics
+    real(kind=kind_phys) :: micro_mg_effi_factor      = 1.0     !< scaling factor for ice effective radition used by radiation
+    real(kind=kind_phys) :: micro_mg_vtrms_factor     = 1.0     !< scaling factor for snow fall speed in PUMAS microphysics
+!+ IH: enhancement factor testing
+    real(kind=kind_phys) :: micro_mg_freeze_enhan_fact  = 1.0     !<
+    real(kind=kind_phys) :: micro_mg_icemult_enhan_fact = 1.0     !<
+!- IH
+!- PUMAS
 
     !--- NSSL microphysics params
     real(kind=kind_phys) :: nssl_cccn       = 0.6e9             !<  CCN concentration (m-3)
@@ -4225,6 +4317,29 @@ module GFS_typedefs
                                nssl_cccn, nssl_alphah, nssl_alphahl,                        &
                                nssl_alphar, nssl_ehw0, nssl_ehlw0,                          &
                                nssl_invertccn, nssl_hail_on, nssl_ccn_on, nssl_3moment,     &
+!+ PUMAS
+                          !--- PUMAS microphysical parameterizations
+                               micro_mg_accre_enhan_fact, micro_mg_autocon_fact,            &
+!                               micro_mg_autocon_lwp_exp, micro_mg_autocon_nd_exp,           &
+!                               micro_mg_warm_rain, micro_mg_implicit_fall, micro_dust_nbins,&
+!                               stochastic_emulated_filename_input_scale,                    &
+!                               stochastic_emulated_filename_output_scale,                   &
+!                               stochastic_emulated_filename_quantile,                       &
+!                               micro_mg_accre_sees_auto, micro_mg_ifs_sed,                  &
+!                               micro_mg_precip_fall_corr, use_hetfrz_classnuc,              &
+!                               micro_mg_evap_sed_off, micro_mg_nrcons, micro_mg_nscons,     &
+!                               micro_mg_rainfreeze_ifs, micro_mg_icenuc_rh_off,             &
+!                               micro_mg_evap_scl_ifs, micro_mg_icenuc_use_meyers,           &
+!                               micro_mg_evap_rhthrsh_ifs, micro_mg_homog_size,              &
+!                               micro_mg_max_nicons, micro_mg_nrnst, micro_mg_nsnst,         &
+!                               micro_mg_iaccr_factor, micro_mg_vtrmi_factor,                &
+!                               micro_mg_effi_factor, micro_mg_vtrms_factor,                 &
+                          ! making 'mg_berg_eff_factor' to be a namelist tunable parameter
+                               mg_berg_eff_factor,                                          &
+!+ IH: enhancement factor testing
+                               micro_mg_freeze_enhan_fact, micro_mg_icemult_enhan_fact,     &
+!- IH
+!- PUMAS
                           !--- max hourly
                                avg_max_length,                                              &
                           !--- land/surface model control
@@ -4639,11 +4754,18 @@ module GFS_typedefs
     Model%levs             = levs
     Model%levsp1           = Model%levs + 1
     Model%levsm1           = Model%levs - 1
-    
+!+ PUMAS
+    Model%micro_nlev       = Model%levs
+    Model%micro_nlevp1     = Model%levs + 1
+!- PUMAS
+
     Model%nblks            = size(blksz)
     allocate (Model%blksz(1:Model%nblks))
     Model%blksz            = blksz
     Model%ncols            = sum(Model%blksz)
+!+ PUMAS
+    Model%ix_micro         = Model%ncols
+!- PUMAS
     ! DH*
     Model%nchunks          = size(blksz)
     allocate (Model%chunk_begin(Model%nchunks))
@@ -4735,6 +4857,9 @@ module GFS_typedefs
     Model%dtp              = dt_phys
     Model%dtf              = dt_dycore
     Model%frain            = Model%dtf/Model%dtp
+!+ PUMAS
+    Model%dtm              = Model%dtp
+!- PUMAS
     Model%nscyc            = nint(Model%fhcyc*con_hr/Model%dtp)
     Model%nszero           = nint(Model%fhzero*con_hr/Model%dtp)
     Model%idat(1:8)        = idat(1:8)
@@ -4972,6 +5097,44 @@ module GFS_typedefs
     Model%tf               = tf
     Model%tcr              = tcr
     Model%tcrf             = 1.0/(tcr-tf)
+
+!+ PUMAS
+!--- PUMAS parameters
+    Model%micro_mg_accre_enhan_fact = micro_mg_accre_enhan_fact
+    Model%micro_mg_autocon_fact     = micro_mg_autocon_fact
+    Model%micro_mg_autocon_lwp_exp  = micro_mg_autocon_lwp_exp
+    Model%micro_mg_autocon_nd_exp   = micro_mg_autocon_nd_exp
+    Model%micro_mg_warm_rain        = micro_mg_warm_rain
+    Model%micro_mg_implicit_fall    = micro_mg_implicit_fall
+    Model%micro_dust_nbins          = micro_dust_nbins
+    Model%stochastic_emulated_filename_input_scale  = stochastic_emulated_filename_input_scale
+    Model%stochastic_emulated_filename_output_scale = stochastic_emulated_filename_output_scale
+    Model%stochastic_emulated_filename_quantile     = stochastic_emulated_filename_quantile
+    Model%micro_mg_accre_sees_auto  = micro_mg_accre_sees_auto
+    Model%micro_mg_ifs_sed          = micro_mg_ifs_sed
+    Model%micro_mg_precip_fall_corr = micro_mg_precip_fall_corr
+    Model%use_hetfrz_classnuc       = use_hetfrz_classnuc
+    Model%micro_mg_evap_sed_off     = micro_mg_evap_sed_off
+    Model%micro_mg_nrcons           = micro_mg_nrcons
+    Model%micro_mg_nscons           = micro_mg_nscons
+    Model%micro_mg_rainfreeze_ifs   = micro_mg_rainfreeze_ifs
+    Model%micro_mg_icenuc_rh_off    = micro_mg_icenuc_rh_off
+    Model%micro_mg_evap_scl_ifs     = micro_mg_evap_scl_ifs
+    Model%micro_mg_icenuc_use_meyers= micro_mg_icenuc_use_meyers
+    Model%micro_mg_evap_rhthrsh_ifs = micro_mg_evap_rhthrsh_ifs
+    Model%micro_mg_homog_size       = micro_mg_homog_size
+    Model%micro_mg_max_nicons       = micro_mg_max_nicons
+    Model%micro_mg_nrnst            = micro_mg_nrnst
+    Model%micro_mg_nsnst            = micro_mg_nsnst
+    Model%micro_mg_iaccr_factor     = micro_mg_iaccr_factor
+    Model%micro_mg_vtrmi_factor     = micro_mg_vtrmi_factor
+    Model%micro_mg_effi_factor      = micro_mg_effi_factor
+    Model%micro_mg_vtrms_factor     = micro_mg_vtrms_factor
+!+ IH: enhancement factor testing
+    Model%micro_mg_freeze_enhan_fact = micro_mg_freeze_enhan_fact
+    Model%micro_mg_icemult_enhan_fact = micro_mg_icemult_enhan_fact
+!- IH
+!- PUMAS
 
 !-- NSSL microphysics params
     Model%nssl_cccn        = nssl_cccn
@@ -6517,7 +6680,47 @@ module GFS_typedefs
                  ' hetfrz_classnuc=', Model%hetfrz_classnuc, ' ncnd=',          Model%ncnd,         &
                  ' mg_alf=',          Model%mg_alf,          ' mg_qcmin=',      Model%mg_qcmin,     &
                  ' mg_do_ice_gmao=',  Model%mg_do_ice_gmao,  ' mg_do_liq_liu=', Model%mg_do_liq_liu
-
+!+ PUMAS
+    else if (Model%imp_physics == Model%imp_physics_pumas) then    ! PUMAS Microphysics
+      Model%npdf3d  = 0
+      Model%num_p3d = 5
+      Model%num_p2d = 1
+      Model%pdfcld  = .false.
+      Model%shcnvcw = .false.
+      Model%nleffr  = 2
+      Model%nieffr  = 3
+      Model%nreffr  = 4
+      Model%nseffr  = 5
+      if (Model%mg_do_graupel .or. Model%mg_do_hail) then
+        Model%num_p3d = 6
+        Model%ngeffr  = 6
+      endif
+      if (nwat /= 6 .and. Model%fprcp >= 2) then
+        print *,' PUMAS MP requires nwat to be set to 6 - job aborted'
+        error stop
+      end if
+      if (Model%me == Model%master)                                                                 &
+         print *,' Using PUMAS double moment microphysics',                            &
+                 ' iaerclm=',         Model%iaerclm,         ' iccn=',          Model%iccn,         &
+                 ' mg_dcs=',          Model%mg_dcs,          ' mg_qcvar=',      Model%mg_qcvar,     &
+                 ' mg_ts_auto_ice=',  Model%mg_ts_auto_ice,  ' pdfflag=',       Model%pdfflag,      &
+                 ' mg_do_graupel=',   Model%mg_do_graupel,   ' mg_do_hail=',    Model%mg_do_hail,   &
+                 ' mg_nccons=',       Model%mg_nccons,       ' mg_nicon=',      Model%mg_nicons,    &
+                 ' mg_ngcons=',       Model%mg_ngcons ,      ' mg_ncnst=',      Model%mg_ncnst,     &
+                 ' mg_ninst=',        Model%mg_ninst ,       ' mg_ngnst=',      Model%mg_ngnst,     &
+                 ' sed_supersat=',    Model%sed_supersat ,   ' do_sb_physics=', Model%do_sb_physics,&
+                 ' microp_uniform=',  Model%microp_uniform,  ' do_cldice=',     Model%do_cldice,    &
+                 ' hetfrz_classnuc=', Model%hetfrz_classnuc, ' ncnd=',          Model%ncnd,         &
+                 ' mg_alf=',          Model%mg_alf,          ' mg_qcmin=',      Model%mg_qcmin,     &
+                 ' mg_do_ice_gmao=',  Model%mg_do_ice_gmao,  ' mg_do_liq_liu=', Model%mg_do_liq_liu,&
+                 ' micro_mg_accre_enhan_fact=', Model%micro_mg_accre_enhan_fact,                    &
+                 ' micro_mg_autocon_fact=',     Model%micro_mg_autocon_fact,                        &
+!+ IH: enhancement factor testing
+                 ' micro_mg_freeze_enhan_fact=', Model%micro_mg_freeze_enhan_fact,                  &
+                 ' micro_mg_icemult_enhan_fact=', Model%micro_mg_icemult_enhan_fact,                &
+!- IH
+                 ' mg_berg_eff_factor=',        Model%mg_berg_eff_factor
+!- PUMAS
     elseif (Model%imp_physics == Model%imp_physics_gfdl) then !GFDL microphysics
       Model%npdf3d  = 0
       if(Model%effr_in) then
@@ -6575,6 +6778,10 @@ module GFS_typedefs
 !   Unified cloud for SHOC and/or MG3
     Model%uni_cld = .false.
     Model%indcld  = -1
+!+ PUMAS
+!    if (Model%imp_physics == Model%imp_physics_mg) then
+    if (Model%imp_physics == Model%imp_physics_mg .or. Model%imp_physics == Model%imp_physics_pumas) then
+!- PUMAS
     if (Model%imp_physics == Model%imp_physics_mg) then
       Model%uni_cld = .true.
       Model%indcld  = 1
@@ -7103,6 +7310,20 @@ module GFS_typedefs
         print *, ' pdfflag           : ', Model%pdfflag
         print *, ' '
       endif
+!+ PUMAS
+      if (Model%imp_physics == Model%imp_physics_pumas) then
+        print *, ' PUMAS microphysical parameters'
+        print *, ' fprcp             : ', Model%fprcp
+        print *, ' mg_dcs            : ', Model%mg_dcs
+        print *, ' mg_qcvar          : ', Model%mg_qcvar
+        print *, ' mg_ts_auto_ice    : ', Model%mg_ts_auto_ice
+        print *, ' mg_alf            : ', Model%mg_alf
+        print *, ' mg_qcmin          : ', Model%mg_qcmin
+        print *, ' mg_rhmini         : ', Model%mg_rhmini
+        print *, ' pdfflag           : ', Model%pdfflag
+        print *, ' '
+      endif
+!- PUMAS
       if (Model%imp_physics == Model%imp_physics_gfdl) then
         print *, ' GFDL microphysical parameters'
         print *, ' GFDL MP radiation inter: ', Model%lgfdlmprad
