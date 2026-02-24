@@ -80,7 +80,6 @@ suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_tempo', 'tracers_GFS_v17_p8_ugwpv
 suite_list.append(suite('SCM_GFS_v16_gfdlmpv3',  'tracers_GFS_v16.txt',                  'input_GFS_v16_gfdlmpv3.nml',        600.0, 1800.0, False))
 #+ PUMAS
 suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_pumas','tracers_GFS_v17_p8_ugwpv1_pumas.txt',   'input_GFS_v17_p8_ugwpv1_pumas.nml', 600.0, 600.0,  False))
-suite_list.append(suite('SCM_GFS_v17_p8_ugwpv1_pumas_debug','tracers_GFS_v17_p8_ugwpv1_pumas.txt','input_GFS_v17_p8_ugwpv1_pumas.nml', 600.0, 600.0,  False))
 #- PUMAS
 
 

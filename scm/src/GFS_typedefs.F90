@@ -6782,7 +6782,6 @@ module GFS_typedefs
 !    if (Model%imp_physics == Model%imp_physics_mg) then
     if (Model%imp_physics == Model%imp_physics_mg .or. Model%imp_physics == Model%imp_physics_pumas) then
 !- PUMAS
-    if (Model%imp_physics == Model%imp_physics_mg) then
       Model%uni_cld = .true.
       Model%indcld  = 1
     elseif (Model%shoc_cld) then
