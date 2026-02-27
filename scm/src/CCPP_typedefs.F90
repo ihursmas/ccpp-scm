@@ -1394,7 +1394,8 @@ contains
     elseif (Model%imp_physics == Model%imp_physics_wsm6) then
       Interstitial%nvdiff = Model%ntrac -3
       if (Model%satmedmf) Interstitial%nvdiff = Interstitial%nvdiff + 1
-!+ PUMAS EDG: diffuse all mixing ratios and number concentrations + ozone
+!+ PUMAS 
+! EDG: diffuse all mixing ratios and number concentrations + ozone
     elseif (Model%imp_physics == Model%imp_physics_pumas) then
       Interstitial%nvdiff = 12
       if (Model%satmedmf) Interstitial%nvdiff = Interstitial%nvdiff + 1

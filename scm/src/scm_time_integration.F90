@@ -167,7 +167,9 @@ subroutine do_time_step(scm_state, physics, cdata, in_spinup)
       error stop
   end if
   ! process-split physics
-  call physics%Interstitial(1)%reset(physics%Model)
+!+ EDG: Commenting out the line below for restoring 'clouds' output in scm_output.F90
+!  call physics%Interstitial(1)%reset(physics%Model)
+!- EDG
   call ccpp_physics_run(cdata, suite_name=trim(adjustl(scm_state%physics_suite_name)), group_name="phys_ps", ierr=ierr)
   if (ierr/=0) then
       write(error_unit,'(a,i0,a)') 'An error occurred in ccpp_physics_run for group phys_ps: ' // trim(cdata%errmsg) // '. Exiting...'

@@ -6835,7 +6835,11 @@ module GFS_typedefs
       Model%xr_con = xr_con
       Model%xr_exp = xr_exp
     else  ! values have not been read in from namelist and should be set according to logic in radiation_clouds.f
-      if (Model%imp_physics == Model%imp_physics_zhao_carr .or. Model%imp_physics == Model%imp_physics_mg .or. Model%imp_physics == Model%imp_physics_fer_hires) then
+!+ PUMAS
+!      if (Model%imp_physics == Model%imp_physics_zhao_carr .or. Model%imp_physics == Model%imp_physics_mg .or. Model%imp_physics == Model%imp_physics_fer_hires) then
+      if (Model%imp_physics == Model%imp_physics_zhao_carr .or. Model%imp_physics == Model%imp_physics_mg .or. Model%imp_physics == Model%imp_physics_fer_hires &
+          .or. Model%imp_physics == Model%imp_physics_pumas ) then
+!- PUMAS
         if (.not. Model%lmfshal) then
           !calls cloud_fraction_XuRandall()
           Model%xr_con = 2000.0
