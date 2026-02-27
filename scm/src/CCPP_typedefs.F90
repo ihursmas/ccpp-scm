@@ -850,7 +850,7 @@ contains
        allocate (Interstitial%micro_frac_ice(ixs:ixe,Model%micro_nlev))
        allocate (Interstitial%micro_frac_cldliq_tend(ixs:ixe,Model%micro_nlev))
        allocate (Interstitial%micro_rain_evap(ixs:ixe,Model%micro_nlev))
-       call Interstitial%micro_proc_rates%allocate(ixs:ixe,Model%micro_nlev,Model%ntrac,warm_rain,errstring)
+       call Interstitial%micro_proc_rates%allocate(1,Model%micro_nlev,Model%ntrac,warm_rain,errstring)
     end if
 !- PUMAS
 
